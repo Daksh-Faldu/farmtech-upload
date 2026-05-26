@@ -28,7 +28,7 @@ const products = [
 ];
 
 function HomePage() {
-  const [videos, setVideos] = useState<{ id: string; video_url: string; customer_name: string }[]>([]);
+  const [videos, setVideos] = useState<{ id: string; video_url: string; customer_name: string | null }[]>([]);
 
   useEffect(() => {
     supabase.from("videos").select("id, video_url, customer_name").order("created_at", { ascending: false }).limit(6)
