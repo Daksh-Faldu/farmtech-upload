@@ -38,36 +38,36 @@ export type Database = {
       videos: {
         Row: {
           created_at: string
-          customer_name: string
+          customer_name: string | null
           file_size: number | null
           id: string
-          location: string
-          mobile: string
-          tractor_model: string
+          location: string | null
+          mobile: string | null
+          tractor_model: string | null
           video_path: string
           video_url: string
           written_review: string | null
         }
         Insert: {
           created_at?: string
-          customer_name: string
+          customer_name?: string | null
           file_size?: number | null
           id?: string
-          location: string
-          mobile: string
-          tractor_model: string
+          location?: string | null
+          mobile?: string | null
+          tractor_model?: string | null
           video_path: string
           video_url: string
           written_review?: string | null
         }
         Update: {
           created_at?: string
-          customer_name?: string
+          customer_name?: string | null
           file_size?: number | null
           id?: string
-          location?: string
-          mobile?: string
-          tractor_model?: string
+          location?: string | null
+          mobile?: string | null
+          tractor_model?: string | null
           video_path?: string
           video_url?: string
           written_review?: string | null
