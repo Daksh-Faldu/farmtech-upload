@@ -97,14 +97,14 @@ export function SiteFooter() {
                 className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
               >
                 <Mail className="w-4 h-4 text-flame" />
-                hello@farmaking.com
+                Mail
               </a>
             </li>
 
             <li>
               <span className="flex items-center gap-2 text-muted-foreground">
                 <MapPin className="w-4 h-4 text-flame" />
-                Punjab, India
+                Gujrat, India
               </span>
             </li>
           </ul>
