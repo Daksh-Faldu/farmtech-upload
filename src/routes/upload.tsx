@@ -168,14 +168,7 @@ function UploadPage() {
           <video src={previewUrl} controls className="w-full rounded-2xl max-h-80" />
         )}
 
-        {uploading && (
-          <div>
-            <div className="flex justify-between text-xs mb-2"><span>Uploading…</span><span>{Math.round(progress)}%</span></div>
-            <div className="h-2 rounded-full bg-input overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-cyber to-flame transition-all" style={{ width: `${progress}%` }} />
-            </div>
-          </div>
-        )}
+        {uploading && <UploadOverlay progress={progress} fileName={file?.name || ""} />}
 
         <button type="submit" disabled={uploading} className="btn-flame w-full !py-4 disabled:opacity-60">
           {uploading ? <><Loader2 className="w-4 h-4 animate-spin"/> Uploading…</> : <><UploadIcon className="w-4 h-4"/> Submit Review</>}
