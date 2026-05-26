@@ -1,0 +1,5 @@
+ALTER TABLE public.videos
+  ALTER COLUMN customer_name DROP NOT NULL,
+  ALTER COLUMN mobile DROP NOT NULL,
+  ALTER COLUMN tractor_model DROP NOT NULL,
+  ALTER COLUMN location DROP NOT NULL;

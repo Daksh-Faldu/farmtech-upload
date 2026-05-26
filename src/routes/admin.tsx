@@ -11,8 +11,8 @@ export const Route = createFileRoute("/admin")({
 });
 
 type Video = {
-  id: string; customer_name: string; mobile: string; tractor_model: string;
-  location: string; written_review: string | null; video_url: string;
+  id: string; customer_name: string | null; mobile: string | null; tractor_model: string | null;
+  location: string | null; written_review: string | null; video_url: string;
   video_path: string; file_size: number | null; created_at: string;
 };
 
@@ -113,8 +113,8 @@ function Dashboard() {
 
   const filtered = videos.filter(v => {
     const q = search.toLowerCase();
-    const matchSearch = !q || v.customer_name.toLowerCase().includes(q) || v.mobile.includes(q) || v.tractor_model.toLowerCase().includes(q);
-    const matchState = !stateFilter || v.location.toLowerCase().includes(stateFilter.toLowerCase());
+    const matchSearch = !q || (v.customer_name?.toLowerCase().includes(q)) || (v.mobile?.includes(q)) || (v.tractor_model?.toLowerCase().includes(q));
+    const matchState = !stateFilter || (v.location?.toLowerCase().includes(stateFilter.toLowerCase()));
     return matchSearch && matchState;
   });
 
@@ -122,7 +122,7 @@ function Dashboard() {
   const uniqueCustomers = new Set(videos.map(v => v.mobile)).size;
 
   async function del(v: Video) {
-    if (!confirm(`Delete review from ${v.customer_name}?`)) return;
+    if (!confirm(`Delete review from ${v.customer_name || "Anonymous"}?`)) return;
     await supabase.storage.from("customer-videos").remove([v.video_path]);
     const { error } = await supabase.from("videos").delete().eq("id", v.id);
     if (error) toast.error(error.message); else { toast.success("Deleted"); load(); }
@@ -175,9 +175,9 @@ function Dashboard() {
               className="glass rounded-2xl overflow-hidden">
               <video src={v.video_url} controls className="w-full aspect-video object-cover bg-black" preload="metadata" />
               <div className="p-4 space-y-1">
-                <p className="font-semibold">{v.customer_name}</p>
-                <p className="text-xs text-muted-foreground">{v.mobile} · {v.tractor_model}</p>
-                <p className="text-xs text-muted-foreground">{v.location}</p>
+                <p className="font-semibold">{v.customer_name || "Anonymous"}</p>
+                <p className="text-xs text-muted-foreground">{[v.mobile, v.tractor_model].filter(Boolean).join(" · ") || "—"}</p>
+                {v.location && <p className="text-xs text-muted-foreground">{v.location}</p>}
                 <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
                   {new Date(v.created_at).toLocaleDateString()} · {v.file_size ? (v.file_size/1024/1024).toFixed(1) + " MB" : ""}
                 </p>

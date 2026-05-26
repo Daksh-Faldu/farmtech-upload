@@ -6,9 +6,9 @@ import { supabase } from "@/integrations/supabase/client";
 
 type Video = {
   id: string;
-  customer_name: string;
-  tractor_model: string;
-  location: string;
+  customer_name: string | null;
+  tractor_model: string | null;
+  location: string | null;
   written_review: string | null;
   video_url: string;
   created_at: string;
@@ -91,9 +91,9 @@ function ReelCard({ v, index }: { v: Video; index: number }) {
         </div>
       </div>
       <div className="p-4">
-        <p className="font-semibold">{v.customer_name}</p>
-        <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1"><Tractor className="w-3 h-3 text-cyber-glow"/>{v.tractor_model}</p>
-        <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1"><MapPin className="w-3 h-3 text-flame"/>{v.location}</p>
+        <p className="font-semibold">{v.customer_name || "Anonymous Farmer"}</p>
+        {v.tractor_model && <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1"><Tractor className="w-3 h-3 text-cyber-glow"/>{v.tractor_model}</p>}
+        {v.location && <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1"><MapPin className="w-3 h-3 text-flame"/>{v.location}</p>}
         {v.written_review && <p className="text-xs mt-3 line-clamp-3 text-muted-foreground">"{v.written_review}"</p>}
       </div>
     </motion.div>

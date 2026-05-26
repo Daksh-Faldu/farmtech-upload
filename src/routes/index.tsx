@@ -28,7 +28,7 @@ const products = [
 ];
 
 function HomePage() {
-  const [videos, setVideos] = useState<{ id: string; video_url: string; customer_name: string }[]>([]);
+  const [videos, setVideos] = useState<{ id: string; video_url: string; customer_name: string | null }[]>([]);
 
   useEffect(() => {
     supabase.from("videos").select("id, video_url, customer_name").order("created_at", { ascending: false }).limit(6)
@@ -186,7 +186,7 @@ function HomePage() {
               <Link key={v.id} to="/gallery" className="aspect-[9/16] rounded-2xl overflow-hidden glass relative group">
                 <video src={v.video_url} className="w-full h-full object-cover" muted playsInline preload="metadata" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-3">
-                  <p className="text-xs font-medium truncate">{v.customer_name}</p>
+                  <p className="text-xs font-medium truncate">{v.customer_name || "Anonymous"}</p>
                 </div>
               </Link>
             ))}

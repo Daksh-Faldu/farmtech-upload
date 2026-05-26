@@ -41,10 +41,7 @@ function UploadPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!file) return toast.error("Please pick a video first.");
-    if (!form.customer_name || !form.mobile || !form.tractor_model || !form.location) {
-      return toast.error("Fill all required fields.");
-    }
-    if (!/^[0-9+\-\s]{7,15}$/.test(form.mobile)) return toast.error("Invalid mobile number.");
+    if (form.mobile && !/^[0-9+\-\s]{7,15}$/.test(form.mobile)) return toast.error("Invalid mobile number.");
 
     setUploading(true);
     setProgress(0);
@@ -66,7 +63,10 @@ function UploadPage() {
     const videoUrl = pub.publicUrl;
 
     const { data: row, error: dbErr } = await supabase.from("videos").insert({
-      ...form,
+      customer_name: form.customer_name || null,
+      mobile: form.mobile || null,
+      tractor_model: form.tractor_model || null,
+      location: form.location || null,
       written_review: form.written_review || null,
       video_path: path,
       video_url: videoUrl,
@@ -121,11 +121,12 @@ function UploadPage() {
       </motion.div>
 
       <form onSubmit={handleSubmit} className="mt-10 glass rounded-3xl p-6 sm:p-10 space-y-6">
+        <p className="text-xs text-muted-foreground">All fields below are optional — only the video is required.</p>
         <div className="grid sm:grid-cols-2 gap-4">
-          <Field label="Customer Name *" value={form.customer_name} onChange={v => setForm({...form, customer_name: v})} />
-          <Field label="Mobile Number *" value={form.mobile} onChange={v => setForm({...form, mobile: v})} type="tel" />
-          <Field label="Tractor Model *" value={form.tractor_model} onChange={v => setForm({...form, tractor_model: v})} placeholder="e.g. John Deere 5310" />
-          <Field label="State / City *" value={form.location} onChange={v => setForm({...form, location: v})} placeholder="e.g. Ludhiana, Punjab" />
+          <Field label="Customer Name" value={form.customer_name} onChange={v => setForm({...form, customer_name: v})} />
+          <Field label="Mobile Number" value={form.mobile} onChange={v => setForm({...form, mobile: v})} type="tel" />
+          <Field label="Tractor Model" value={form.tractor_model} onChange={v => setForm({...form, tractor_model: v})} placeholder="e.g. John Deere 5310" />
+          <Field label="State / City" value={form.location} onChange={v => setForm({...form, location: v})} placeholder="e.g. Ludhiana, Punjab" />
         </div>
         <div>
           <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Written Review (optional)</label>
@@ -167,14 +168,7 @@ function UploadPage() {
           <video src={previewUrl} controls className="w-full rounded-2xl max-h-80" />
         )}
 
-        {uploading && (
-          <div>
-            <div className="flex justify-between text-xs mb-2"><span>Uploading…</span><span>{Math.round(progress)}%</span></div>
-            <div className="h-2 rounded-full bg-input overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-cyber to-flame transition-all" style={{ width: `${progress}%` }} />
-            </div>
-          </div>
-        )}
+        {uploading && <UploadOverlay progress={progress} fileName={file?.name || ""} />}
 
         <button type="submit" disabled={uploading} className="btn-flame w-full !py-4 disabled:opacity-60">
           {uploading ? <><Loader2 className="w-4 h-4 animate-spin"/> Uploading…</> : <><UploadIcon className="w-4 h-4"/> Submit Review</>}
@@ -191,5 +185,118 @@ function Field({ label, value, onChange, type = "text", placeholder }: { label: 
       <input type={type} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} maxLength={200}
         className="w-full rounded-xl bg-input border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
     </div>
+  );
+}
+
+function UploadOverlay({ progress, fileName }: { progress: number; fileName: string }) {
+  const pct = Math.round(progress);
+  const circumference = 2 * Math.PI * 70;
+  const dashOffset = circumference - (progress / 100) * circumference;
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-background/85 backdrop-blur-xl"
+    >
+      {/* Animated background grid */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 opacity-30"
+          style={{
+            backgroundImage: "linear-gradient(rgba(0,200,255,.15) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,255,.15) 1px,transparent 1px)",
+            backgroundSize: "40px 40px",
+            maskImage: "radial-gradient(ellipse at center, black 30%, transparent 70%)",
+          }}
+        />
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full bg-cyber/20 blur-3xl"
+            style={{ width: 200 + i * 40, height: 200 + i * 40, left: "50%", top: "50%", x: "-50%", y: "-50%" }}
+            animate={{ scale: [1, 1.4, 1], opacity: [0.2, 0.5, 0.2] }}
+            transition={{ duration: 3 + i * 0.4, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }}
+          />
+        ))}
+      </div>
+
+      <div className="relative flex flex-col items-center gap-8 px-6">
+        {/* Circular progress with orbiting particles */}
+        <div className="relative w-48 h-48">
+          {/* Orbiting dots */}
+          {[0, 1, 2].map(i => (
+            <motion.div
+              key={i}
+              className="absolute inset-0"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 4 + i * 1.5, repeat: Infinity, ease: "linear" }}
+            >
+              <div className={`absolute w-2 h-2 rounded-full ${i % 2 === 0 ? "bg-cyber-glow" : "bg-flame"} shadow-[0_0_12px_currentColor]`}
+                style={{ top: i === 0 ? 0 : i === 1 ? "50%" : "100%", left: "50%", transform: "translate(-50%,-50%)" }}
+              />
+            </motion.div>
+          ))}
+
+          {/* SVG progress ring */}
+          <svg className="w-full h-full -rotate-90" viewBox="0 0 160 160">
+            <defs>
+              <linearGradient id="up-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="hsl(195 100% 55%)" />
+                <stop offset="100%" stopColor="hsl(20 100% 55%)" />
+              </linearGradient>
+            </defs>
+            <circle cx="80" cy="80" r="70" stroke="hsl(var(--border))" strokeWidth="6" fill="none" opacity="0.3" />
+            <circle
+              cx="80" cy="80" r="70" stroke="url(#up-grad)" strokeWidth="6" fill="none"
+              strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={dashOffset}
+              style={{ transition: "stroke-dashoffset 0.4s ease", filter: "drop-shadow(0 0 8px hsl(195 100% 55% / 0.6))" }}
+            />
+          </svg>
+
+          {/* Center % */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <motion.div
+              key={pct}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="font-display text-5xl font-bold text-gradient-cyber"
+            >
+              {pct}%
+            </motion.div>
+            <Loader2 className="w-4 h-4 animate-spin text-cyber-glow mt-1" />
+          </div>
+        </div>
+
+        <div className="text-center max-w-md">
+          <motion.h3
+            className="font-display text-2xl font-bold mb-2"
+            animate={{ opacity: [0.6, 1, 0.6] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            Beaming your review to the cloud
+          </motion.h3>
+          <p className="text-sm text-muted-foreground truncate">{fileName}</p>
+
+          {/* Animated dots */}
+          <div className="flex items-center justify-center gap-1.5 mt-4">
+            {[0, 1, 2, 3, 4].map(i => (
+              <motion.span
+                key={i}
+                className="w-1.5 h-1.5 rounded-full bg-flame"
+                animate={{ y: [0, -6, 0], opacity: [0.4, 1, 0.4] }}
+                transition={{ duration: 0.9, repeat: Infinity, delay: i * 0.12 }}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Scanning bar */}
+        <div className="relative w-72 h-1 rounded-full bg-input overflow-hidden">
+          <motion.div
+            className="absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-cyber-glow to-transparent"
+            animate={{ x: ["-100%", "300%"] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: "linear" }}
+          />
+        </div>
+      </div>
+    </motion.div>
   );
 }
