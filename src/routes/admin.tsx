@@ -175,9 +175,9 @@ function Dashboard() {
               className="glass rounded-2xl overflow-hidden">
               <video src={v.video_url} controls className="w-full aspect-video object-cover bg-black" preload="metadata" />
               <div className="p-4 space-y-1">
-                <p className="font-semibold">{v.customer_name}</p>
-                <p className="text-xs text-muted-foreground">{v.mobile} · {v.tractor_model}</p>
-                <p className="text-xs text-muted-foreground">{v.location}</p>
+                <p className="font-semibold">{v.customer_name || "Anonymous"}</p>
+                <p className="text-xs text-muted-foreground">{[v.mobile, v.tractor_model].filter(Boolean).join(" · ") || "—"}</p>
+                {v.location && <p className="text-xs text-muted-foreground">{v.location}</p>}
                 <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
                   {new Date(v.created_at).toLocaleDateString()} · {v.file_size ? (v.file_size/1024/1024).toFixed(1) + " MB" : ""}
                 </p>
