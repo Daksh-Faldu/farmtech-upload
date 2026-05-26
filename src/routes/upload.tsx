@@ -121,11 +121,12 @@ function UploadPage() {
       </motion.div>
 
       <form onSubmit={handleSubmit} className="mt-10 glass rounded-3xl p-6 sm:p-10 space-y-6">
+        <p className="text-xs text-muted-foreground">All fields below are optional — only the video is required.</p>
         <div className="grid sm:grid-cols-2 gap-4">
-          <Field label="Customer Name *" value={form.customer_name} onChange={v => setForm({...form, customer_name: v})} />
-          <Field label="Mobile Number *" value={form.mobile} onChange={v => setForm({...form, mobile: v})} type="tel" />
-          <Field label="Tractor Model *" value={form.tractor_model} onChange={v => setForm({...form, tractor_model: v})} placeholder="e.g. John Deere 5310" />
-          <Field label="State / City *" value={form.location} onChange={v => setForm({...form, location: v})} placeholder="e.g. Ludhiana, Punjab" />
+          <Field label="Customer Name" value={form.customer_name} onChange={v => setForm({...form, customer_name: v})} />
+          <Field label="Mobile Number" value={form.mobile} onChange={v => setForm({...form, mobile: v})} type="tel" />
+          <Field label="Tractor Model" value={form.tractor_model} onChange={v => setForm({...form, tractor_model: v})} placeholder="e.g. John Deere 5310" />
+          <Field label="State / City" value={form.location} onChange={v => setForm({...form, location: v})} placeholder="e.g. Ludhiana, Punjab" />
         </div>
         <div>
           <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Written Review (optional)</label>
