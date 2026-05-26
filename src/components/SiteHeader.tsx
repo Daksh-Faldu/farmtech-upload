@@ -15,12 +15,10 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 glass">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
+        <Link to="/" className="flex items-center gap-3 group">
           <div className="relative">
-            <div className="absolute inset-0 blur-md bg-cyber/60 rounded-lg group-hover:bg-flame/60 transition-colors" />
-            <div className="relative w-9 h-9 rounded-lg bg-gradient-to-br from-cyber to-flame flex items-center justify-center">
-              <Zap className="w-5 h-5 text-background" strokeWidth={2.5} />
-            </div>
+            <div className="absolute inset-0 blur-md bg-cyber/40 rounded-full group-hover:bg-flame/50 transition-colors" />
+            <img src={logo} alt="Farmaking Automation" className="relative w-10 h-10 object-contain" />
           </div>
           <div className="flex flex-col leading-none">
             <span className="font-display font-bold text-sm text-foreground">FARMAKING</span>
