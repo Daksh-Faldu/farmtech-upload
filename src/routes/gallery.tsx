@@ -6,9 +6,9 @@ import { supabase } from "@/integrations/supabase/client";
 
 type Video = {
   id: string;
-  customer_name: string;
-  tractor_model: string;
-  location: string;
+  customer_name: string | null;
+  tractor_model: string | null;
+  location: string | null;
   written_review: string | null;
   video_url: string;
   created_at: string;
