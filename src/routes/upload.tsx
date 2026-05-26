@@ -63,7 +63,10 @@ function UploadPage() {
     const videoUrl = pub.publicUrl;
 
     const { data: row, error: dbErr } = await supabase.from("videos").insert({
-      ...form,
+      customer_name: form.customer_name || null,
+      mobile: form.mobile || null,
+      tractor_model: form.tractor_model || null,
+      location: form.location || null,
       written_review: form.written_review || null,
       video_path: path,
       video_url: videoUrl,
