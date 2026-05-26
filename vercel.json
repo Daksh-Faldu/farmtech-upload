@@ -1,6 +1,11 @@
-{
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "tanstack-start",
-  "installCommand": "bun install",
-  "buildCommand": "bun run build"
+{ 
+  "$schema": "https://openapi.vercel.sh/vercel.json", 
+  "buildCommand": "bun run build", 
+  "outputDirectory": "dist", 
+  "framework": null, 
+  "rewrites": 
+  [ { 
+    "source": "/(.*)", 
+    "destination": "/index.html"
+  } ]
 }
