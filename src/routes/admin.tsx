@@ -11,8 +11,8 @@ export const Route = createFileRoute("/admin")({
 });
 
 type Video = {
-  id: string; customer_name: string; mobile: string; tractor_model: string;
-  location: string; written_review: string | null; video_url: string;
+  id: string; customer_name: string | null; mobile: string | null; tractor_model: string | null;
+  location: string | null; written_review: string | null; video_url: string;
   video_path: string; file_size: number | null; created_at: string;
 };
 
