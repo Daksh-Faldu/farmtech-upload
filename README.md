@@ -18,8 +18,7 @@ Premium agri-tech website for customer review video uploads in original HD quali
 
 ## Admin credentials (pre-seeded)
 ```
-Email:    admin@farmaking.com
-Password: Farmaking@2025
+
 ```
 Change it immediately in production from the Lovable Cloud → Users panel.
 
