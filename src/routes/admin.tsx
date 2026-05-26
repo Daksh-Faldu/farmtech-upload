@@ -122,7 +122,7 @@ function Dashboard() {
   const uniqueCustomers = new Set(videos.map(v => v.mobile)).size;
 
   async function del(v: Video) {
-    if (!confirm(`Delete review from ${v.customer_name}?`)) return;
+    if (!confirm(`Delete review from ${v.customer_name || "Anonymous"}?`)) return;
     await supabase.storage.from("customer-videos").remove([v.video_path]);
     const { error } = await supabase.from("videos").delete().eq("id", v.id);
     if (error) toast.error(error.message); else { toast.success("Deleted"); load(); }
