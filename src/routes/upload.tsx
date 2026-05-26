@@ -41,10 +41,7 @@ function UploadPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!file) return toast.error("Please pick a video first.");
-    if (!form.customer_name || !form.mobile || !form.tractor_model || !form.location) {
-      return toast.error("Fill all required fields.");
-    }
-    if (!/^[0-9+\-\s]{7,15}$/.test(form.mobile)) return toast.error("Invalid mobile number.");
+    if (form.mobile && !/^[0-9+\-\s]{7,15}$/.test(form.mobile)) return toast.error("Invalid mobile number.");
 
     setUploading(true);
     setProgress(0);
