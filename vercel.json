@@ -1,10 +1,4 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "bun run build",
-  "framework": null,
-  "functions": {
-    "api/server.js": {
-      "includeFiles": ".output/**"
-    }
-  }
+  "framework": null
 }
