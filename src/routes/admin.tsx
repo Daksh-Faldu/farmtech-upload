@@ -113,8 +113,8 @@ function Dashboard() {
 
   const filtered = videos.filter(v => {
     const q = search.toLowerCase();
-    const matchSearch = !q || v.customer_name.toLowerCase().includes(q) || v.mobile.includes(q) || v.tractor_model.toLowerCase().includes(q);
-    const matchState = !stateFilter || v.location.toLowerCase().includes(stateFilter.toLowerCase());
+    const matchSearch = !q || (v.customer_name?.toLowerCase().includes(q)) || (v.mobile?.includes(q)) || (v.tractor_model?.toLowerCase().includes(q));
+    const matchState = !stateFilter || (v.location?.toLowerCase().includes(stateFilter.toLowerCase()));
     return matchSearch && matchState;
   });
 
